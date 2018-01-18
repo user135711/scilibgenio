@@ -1,0 +1,30 @@
+#!/bin/bash
+
+BURL="http://libgen.io/scimag/ads.php?doi="
+UA="Mozilla/5.1"
+
+getart()
+{
+	doi=$1
+	local URL="$BURL$doi"
+	local DLURL="$(lynx -dump -listonly -nonumbers -useragent=$UA $URL | grep 'get.php')"
+	curl -O -J -A $UA -e "$URL" "$DLURL"
+}
+
+if [ $# -ne 1 ] ; then
+	echo "<doi or input file>"
+	exit 1
+fi
+
+
+if [ -f $1 ] ; then
+	flag=1
+fi
+
+if [ -z $flag ] ; then
+	getart $1
+fi
+
+while read doi ; do
+	getart $doi
+done
