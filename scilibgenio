@@ -27,4 +27,4 @@ fi
 
 while read doi ; do
 	getart $doi
-done
+done < $1
